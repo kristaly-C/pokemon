@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
-import ComparisonModal from './components/ComparisonModal.vue'
+import FightModal from './components/FightModal.vue'
 import { fetchPokemonList, fetchRandomPokemon } from './services/pokemonApi'
 
 const pokemons = ref(null)
 const isDarkTheme = ref(true)
 const selectedPokemons = ref([])
-const showCompareModal = ref(false)
+const showFightModal = ref(false)
 
 function toggleTheme() {
   isDarkTheme.value = !isDarkTheme.value
@@ -25,14 +25,14 @@ function togglePokemonSelection(pokemon) {
   }
 }
 
-function openCompareModal() {
+function openFightModal() {
   if (selectedPokemons.value.length === 2) {
-    showCompareModal.value = true
+    showFightModal.value = true
   }
 }
 
-function closeCompareModal() {
-  showCompareModal.value = false
+function closeFightModal() {
+  showFightModal.value = false
 }
 
 async function getData() {
@@ -97,17 +97,17 @@ function getStatClass(statName, index, value) {
       <button class="add-pokemon-btn" @click="addRandomPokemon">Add Random Pokemon</button>
       
       <div class="selected-pokemon">
-        <h3>Selected for Comparison:</h3>
+        <h3>Selected for Battle:</h3>
         <div v-for="pokemon in selectedPokemons" :key="pokemon.name" class="selected-pokemon-item">
           <img :src="pokemon.sprites?.front_default" :alt="pokemon.name">
           <span>{{ pokemon.name }}</span>
         </div>
         <button 
-          class="compare-btn" 
-          @click="openCompareModal"
+          class="fight-btn" 
+          @click="openFightModal"
           :disabled="selectedPokemons.length !== 2"
         >
-          Compare Selected
+          Start Battle
         </button>
       </div>
     </div>
@@ -125,10 +125,10 @@ function getStatClass(statName, index, value) {
       </div>
     </div>
 
-    <ComparisonModal
-      v-if="showCompareModal"
+    <FightModal
+      v-if="showFightModal"
       :selectedPokemons="selectedPokemons"
-      @close="closeCompareModal"
+      @close="closeFightModal"
     />
   </div>
 </template>
@@ -275,11 +275,11 @@ body {
   height: 50px;
 }
 
-.compare-btn {
+.fight-btn {
   width: 100%;
   padding: 10px;
   margin-top: 1rem;
-  background-color: #4a90e2;
+  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 4px;
@@ -287,13 +287,13 @@ body {
   transition: all 0.3s;
 }
 
-.compare-btn:disabled {
+.fight-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-.compare-btn:not(:disabled):hover {
-  background-color: #357abd;
+.fight-btn:not(:disabled):hover {
+  background-color: #c82333;
 }
 </style>
 
